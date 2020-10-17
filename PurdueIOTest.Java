@@ -1,3 +1,5 @@
+package com.example.purdueioandroidtest;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -6,19 +8,15 @@ import java.net.HttpURLConnection;
 
 public class PurdueIOTest {
 
-    public static void main(String[] args) throws IOException {
+    public static String callAPI(String url, String endpoint, String params) throws IOException {
 
-        final String URL = "http://api.purdue.io/odata/";
-        final String ENDPOINT = "Courses";
-        final String PARAMS = "?$filter=contains(Title,%20%27Algebra%27)";
-        
         // Create a URL object of our desired query
-        System.out.println("Creating URL: " + URL + ENDPOINT + PARAMS);
-        URL urlToGet = new URL(URL + ENDPOINT + PARAMS); 
+        System.out.println("Creating URL: " + url + endpoint + params);
+        URL urlToGet = new URL(url + endpoint + params);
 
         // Open an HTML connection with our URL, cast it as a HttpURLConnection.
         System.out.println("Creating Http connection...");
-        HttpURLConnection connection = (HttpURLConnection) urlToGet.openConnection(); 
+        HttpURLConnection connection = (HttpURLConnection) urlToGet.openConnection();
 
         // Specifying that we want a GET request.
         connection.setRequestMethod("GET");
@@ -42,13 +40,15 @@ public class PurdueIOTest {
             // We may want to be able to convert the StringBuffer response into a Hashmap for data accessibility.
 
             // Creates a response file and writes the API response within.
-            CreateFile("response.txt");
-            WriteToFile("response.txt", response.toString());
+            // CreateFile("response.txt");
+            // WriteToFile("response.txt", response.toString());
+            return response.toString();
         } else {
             System.out.println("Connection request failed. Make sure the URL is valid.");
+            return "";
         }
     }
-    
+
     public static void CreateFile(String fileName) {
         try {
             File file = new File(fileName);
@@ -69,9 +69,9 @@ public class PurdueIOTest {
             myWriter.write(in);
             myWriter.close();
             System.out.println("Successfully wrote to file: " + fileName);
-          } catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
-          }
+        }
     }
 }
